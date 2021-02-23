@@ -46,7 +46,7 @@ export default function LayoutApp(props) {
           </div>
         </Menu>
       </Header>
-      <Content style={{ padding: "0 50px" }}>
+      <Content style={{ padding: "0 50px", marginBottom: '100px' }}>
         <div className="site-layout-content">{children}</div>
       </Content>
       <Footer

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 
 export const AppContext = createContext();
 
@@ -9,10 +9,13 @@ export function AppContextProvider({ children }) {
     userName: "",
   });
 
+  const [playerList, setplayerList] = useState([]);
+
   useEffect(() => {
     const geData = () => {
       let config = localStorage.getItem("config");
-      console.log(config);
+      let list = localStorage.getItem("playerList");
+      //   console.log(config);
       if (config) {
         let { userName, balance } = JSON.parse(config);
         if (userName && balance) {
@@ -23,20 +26,26 @@ export function AppContextProvider({ children }) {
           });
         }
       }
+      if (list) {
+        setplayerList(JSON.parse(list));
+      } else {
+        localStorage.setItem("playerList", JSON.stringify([]));
+      }
     };
     geData();
   }, []);
 
   const login = (_userName) => {
-    let balance = gameStatus.balance;
+    // let balance = gameStatus.balance;
     setGameStatus({
       ...gameStatus,
       userName: _userName,
       isLogin: true,
+      balance: 99.99,
     });
     localStorage.setItem(
       "config",
-      JSON.stringify({ balance: balance, userName: _userName })
+      JSON.stringify({ balance: 99.99, userName: _userName })
     );
   };
 
@@ -45,34 +54,16 @@ export function AppContextProvider({ children }) {
       ...gameStatus,
       userName: "",
       isLogin: false,
-      balance: 99.99
+      balance: 99.99,
     });
     localStorage.setItem("config", "");
   };
 
-  const refreshStorage = () => {
-    localStorage.setItem(
-      "config",
-      JSON.stringify({
-        balance: gameStatus.balance,
-        userName: gameStatus.userName,
-      })
-    );
-  };
-
-  const addPoint = () => {
+  const addPoint = (point) => {
     setGameStatus({
       ...gameStatus,
-      balance: gameStatus.balance + 0.5,
+      balance: gameStatus.balance + point,
     });
-    // refreshStorage();
-  };
-  const addSuperPoint = () => {
-    setGameStatus({
-      ...gameStatus,
-      balance: gameStatus.balance + 10,
-    });
-    // refreshStorage();
   };
 
   const removePoint = () => {
@@ -82,10 +73,40 @@ export function AppContextProvider({ children }) {
     });
   };
 
+  const endGame = () => {
+    setplayerList([
+      ...playerList,
+      {
+        id: playerList.length + 1,
+        name: gameStatus.userName || "invitado",
+        result: gameStatus.balance,
+        time: new Date().toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }),
+      },
+    ]);
+  };
+
+  const refreshStorageConfig = useCallback(() => {
+    console.log();
+    let { balance, userName } = gameStatus;
+    localStorage.setItem("config", JSON.stringify({ balance, userName }));
+  }, [gameStatus]);
+
+  const refreshStoragePlayerList = useCallback(() => {
+    localStorage.setItem("playerList", JSON.stringify(playerList));
+  }, [playerList]);
+
   useEffect(() => {
-    refreshStorage();
-  }, [gameStatus.balance,refreshStorage]);
-  
+    refreshStoragePlayerList();
+  }, [playerList, refreshStoragePlayerList]);
+
+  useEffect(() => {
+    refreshStorageConfig();
+  }, [gameStatus.balance, refreshStorageConfig]);
+
   return (
     <AppContext.Provider
       value={{
@@ -94,13 +115,13 @@ export function AppContextProvider({ children }) {
           style: "currency",
           currency: "USD",
         }).format(gameStatus.balance),
-
         isLogin: gameStatus.isLogin,
+        playerList,
         login,
         logout,
         addPoint,
-        addSuperPoint,
         removePoint,
+        endGame,
       }}
     >
       {children}

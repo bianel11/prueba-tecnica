@@ -3,9 +3,7 @@ import { Modal, Button, Input, Row, Col, notification } from "antd";
 import { AppContext } from "../../context/AppContext";
 
 export default function ModalGame({ isModalVisible, setIsModalVisible }) {
-  const { balance, addSuperPoint, addPoint, removePoint } = useContext(
-    AppContext
-  );
+  const { balance, addPoint, removePoint, endGame } = useContext(AppContext);
 
   const getNumbers = () => {
     return {
@@ -16,32 +14,29 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
   };
 
   const [nums, setnums] = useState({ num: "", num1: "", num2: "" });
-  const [check, setCheck] = useState(false);
-
-  // useEffect(() => {
-  //   setnums(getNumbers);
-  // }, [isModalVisible]);
-
-  const checkGame = (debug = false) => {
+ 
+ 
+  const checkGame = () => {
     let { num1, num2, num3 } = nums;
-    if ((num1 === num2 && num1 === num3) || debug) {
-      addSuperPoint();
-      if (!debug) {
+    if (num1 === num2 && num1 === num3) {
+      if (num1 === 7 && num2 === 7 && num3 === 7) {
+        addPoint(10);
         notification.open({
-          message: "Punto un Super Punto!!!!",
-          description: `Ganaste 10 monedas con la combinacion { ${num1} - ${num2} - ${num3} }`,
+          message: "Acertaste!",
+          description: `Ganaste $10 con la combinacion { ${num1} - ${num2} - ${num3} }`,
         });
       } else {
+        addPoint(5);
         notification.open({
-          message: "Punto un Super Punto!!!!",
-          description: `Ganaste 10 monedas simuladas`,
+          message: "Acertaste!",
+          description: `Ganaste $5 con la combinacion { ${num1} - ${num2} - ${num3} }`,
         });
       }
     } else if (num1 === num2 || num2 === num3) {
-      addPoint();
+      addPoint(0.5);
       notification.open({
-        message: "Punto Ganado",
-        description: `Ganaste 0.5 monedas con la combinacion { ${num1} - ${num2} - ${num3} }`,
+        message: "Acertaste!",
+        description: `Ganaste $0.5 con la combinacion { ${num1} - ${num2} - ${num3} }`,
       });
     } else {
       removePoint();
@@ -49,27 +44,24 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
   };
 
   useEffect(() => {
-    if (check) {
+    if (nums.num1 !== "") {
       checkGame();
-      setCheck(false);
     }
-  }, [check]);
+  }, [nums]);
 
   const debuggerBottom = () => {
     setnums({ num1: 7, num2: 7, num3: 7 });
-    checkGame(true);
   };
 
   const resetNumbers = () => {
-    setnums(getNumbers());
-    setCheck(true);
+    setnums(getNumbers()); 
   };
 
-  // const handleOk = () => {
-  //   setIsModalVisible(false);
-  // };
-
-  const handleCancel = () => {
+  const closeGame = () => {
+    if (nums.num1 !== "") {
+      endGame();
+    }
+    setnums({ num: "", num1: "", num2: "" });
     setIsModalVisible(false);
   };
 
@@ -78,30 +70,23 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
       <Modal
         title={"Nuevo Juego - Saldo: " + balance}
         visible={isModalVisible}
-        // onOk={handleOk}
-        onCancel={handleCancel}
+        // onCancel={closeGame}
         footer={[
-          <Button
-            key="submit"
-            type="primary"
-            // loading={loading}
-            onClick={resetNumbers}
-          >
+          <Button key="submit" type="primary" onClick={resetNumbers}>
             Generar Números
           </Button>,
-          <Button
-            key="back1"
-            type=""
-            onClick={debuggerBottom} /* onClick={this.handleCancel} */
-          >
+          <Button key="back1" type="" onClick={debuggerBottom}>
             Depurar
           </Button>,
-          <Button key="back" type="danger" onClick={handleCancel}>
+          <Button key="back" type="danger" onClick={closeGame}>
             Cerrar
           </Button>,
         ]}
       >
-        <p>Presiona <b>Generar Números</b> para empezar a jugar</p>
+        <p>
+          Presiona <b>Generar Números</b> para empezar a jugar. <br />
+        </p>
+
         <Input.Group size="large">
           <Row gutter={24}>
             <Col span={8}>
@@ -115,6 +100,15 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
             </Col>
           </Row>
         </Input.Group>
+        <p>
+          <b>¿Cómo jugar?</b> Por cada jugada consumes $1 de tu saldo. <br />-
+          Si sacas tres veces el mismo número ganas <b> $10.</b> Por ejemplo: [
+          7 - 7 - 7 ] <br />- Si sacas dos veces el mismo número uno al lado del
+          otro ganas <b>$0.5.</b> Por ejemplo: [ 2 - 2 - 3] o [ 3 - 5 - 5]{" "}
+          <br />- Si sacas dos veces el mismo número pero no juntos,{" "}
+          <b>no ganarás nada.</b>
+          Por ejemplo: [ 2 - 3 - 2] o [ 1 - 5 - 1]
+        </p>
       </Modal>
     </>
   );
