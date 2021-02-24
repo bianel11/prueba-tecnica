@@ -15,7 +15,6 @@ export function AppContextProvider({ children }) {
     const geData = () => {
       let config = localStorage.getItem("config");
       let list = localStorage.getItem("playerList");
-      //   console.log(config);
       if (config) {
         let { userName, balance } = JSON.parse(config);
         if (userName && balance) {

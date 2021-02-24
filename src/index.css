@@ -1,4 +1,5 @@
 @import "~antd/dist/antd.css";
+
 .logo {
   display: flex;
   justify-content: center;
@@ -10,8 +11,6 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-
 .text-logo{
-  margin: 0px !important;
-  /* color: aquamarine !important; */
+  margin: 0px !important; 
 }

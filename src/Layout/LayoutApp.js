@@ -1,11 +1,13 @@
-import React, { useContext, } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { blue } from "@ant-design/colors";
 import { Layout, Menu, Button, Typography, Avatar } from "antd";
 import ModalLogin from "../components/ModalLogin/ModalLogin";
-import { UserOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+} from "@ant-design/icons";
 const { Header, Content, Footer } = Layout;
-const { Title } = Typography; 
+const { Title } = Typography;
 
 export default function LayoutApp(props) {
   const { children } = props;
@@ -24,7 +26,7 @@ export default function LayoutApp(props) {
           </Title>
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <div style={{ float: "right" }}>
+          <div style={{ float: window.screen.width < 600 ? 'none': "right" }}>
             <span style={{ marginRight: "5px" }}>
               {balance} - {userName || "Invitado"}{" "}
               {userName ? (
@@ -46,7 +48,7 @@ export default function LayoutApp(props) {
           </div>
         </Menu>
       </Header>
-      <Content style={{ padding: "0 50px", marginBottom: '100px' }}>
+      <Content style={{ padding: "0 50px", marginBottom: "100px", marginTop:  window.screen.width < 600 ? 50: "0" }}>
         <div className="site-layout-content">{children}</div>
       </Content>
       <Footer

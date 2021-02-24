@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
-import { Modal, Button, Row, Col, Input } from "antd";
 import { AppContext } from "../../context/AppContext";
+import { Modal, Button, Row, Col, Input } from "antd";
+
 export default function ModalLogin() {
+  const { login } = useContext(AppContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const {login} = useContext(AppContext);
-  const [user, setUser]=  useState('');
+  const [user, setUser] = useState("");
+
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    login(user)
+    login(user);
     setIsModalVisible(false);
   };
 
@@ -28,14 +30,22 @@ export default function ModalLogin() {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          <Button type="danger" key={'btn1'} onClick={handleCancel}>Cancelar</Button>,
-          <Button type="primary" key={'btn2'} onClick={handleOk}>Iniciar</Button>,
+          <Button type="danger" key={"btn1"} onClick={handleCancel}>
+            Cancelar
+          </Button>,
+          <Button type="primary" key={"btn2"} onClick={handleOk}>
+            Iniciar
+          </Button>,
         ]}
       >
         <Input.Group>
           <Row gutter={24}>
             <Col span={24}>
-              <Input placeholder="Ingresa nombre de usuario" value={user} onChange={e => setUser(e.target.value)} />
+              <Input
+                placeholder="Ingresa nombre de usuario"
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
+              />
             </Col>
           </Row>
         </Input.Group>

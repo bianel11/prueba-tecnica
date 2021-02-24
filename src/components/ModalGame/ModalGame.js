@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Modal, Button, Input, Row, Col, notification } from "antd";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
+import { Modal, Button, Input, Row, Col, notification } from "antd";
 
 export default function ModalGame({ isModalVisible, setIsModalVisible }) {
   const { balance, addPoint, removePoint, endGame } = useContext(AppContext);
+  const [nums, setnums] = useState({ num: "", num1: "", num2: "" });
 
   const getNumbers = () => {
     return {
@@ -13,11 +14,7 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
     };
   };
 
-  const [nums, setnums] = useState({ num: "", num1: "", num2: "" });
- 
- 
-  const checkGame = () => {
-    let { num1, num2, num3 } = nums;
+  const checkGame = ( num1, num2, num3 ) => {
     if (num1 === num2 && num1 === num3) {
       if (num1 === 7 && num2 === 7 && num3 === 7) {
         addPoint(10);
@@ -42,19 +39,16 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
       removePoint();
     }
   };
-
-  useEffect(() => {
-    if (nums.num1 !== "") {
-      checkGame();
-    }
-  }, [nums]);
-
+ 
   const debuggerBottom = () => {
+    checkGame(7, 7, 7);
     setnums({ num1: 7, num2: 7, num3: 7 });
   };
 
   const resetNumbers = () => {
-    setnums(getNumbers()); 
+    let {num1, num2, num3} = getNumbers();
+    checkGame(num1, num2, num3);
+    setnums({num1, num2, num3,}); 
   };
 
   const closeGame = () => {
@@ -70,7 +64,7 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
       <Modal
         title={"Nuevo Juego - Saldo: " + balance}
         visible={isModalVisible}
-        // onCancel={closeGame}
+        onCancel={closeGame}
         footer={[
           <Button key="submit" type="primary" onClick={resetNumbers}>
             Generar Números

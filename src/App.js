@@ -1,4 +1,3 @@
-import "./App.css";
 import React, { useState } from "react";
 import { Typography, Button } from "antd";
 import LayoutApp from "./Layout/LayoutApp";
