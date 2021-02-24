@@ -95,12 +95,13 @@ export default function ModalGame({ isModalVisible, setIsModalVisible }) {
           </Row>
         </Input.Group>
         <p>
-          <b>¿Cómo jugar?</b> Por cada jugada consumes $1 de tu saldo. <br />-
-          Si sacas tres veces el mismo número ganas <b> $10.</b> Por ejemplo: [
-          7 - 7 - 7 ] <br />- Si sacas dos veces el mismo número uno al lado del
-          otro ganas <b>$0.5.</b> Por ejemplo: [ 2 - 2 - 3] o [ 3 - 5 - 5]{" "}
+          <b>¿Cómo jugar?</b> Por cada jugada consumes $1 de tu saldo. <br />
+         - Si sacas la cominación de [ 7 - 7 - 7] ganarás <b>$10.</b> <br /> 
+          - Si sacas tres veces el mismo número ganarás <b> $5.</b> Por ejemplo: [
+          3 - 3 - 3 ] <br />- Si sacas dos veces el mismo número uno al lado del
+          otro ganarás <b>$0.5.</b> Por ejemplo: [ 2 - 2 - 3] o [ 3 - 5 - 5]{" "}
           <br />- Si sacas dos veces el mismo número pero no juntos,{" "}
-          <b>no ganarás nada.</b>
+          <b>no ganarás nada. </b>
           Por ejemplo: [ 2 - 3 - 2] o [ 1 - 5 - 1]
         </p>
       </Modal>
