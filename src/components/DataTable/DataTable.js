@@ -13,7 +13,7 @@ const columns = [
     dataIndex: "name",
     key: "name",
     sorter: {
-      compare: (a, b) => a.name > b.name,
+      compare: (a, b) => a.name.localeCompare(b.name),
     },
   },
   {
@@ -27,7 +27,7 @@ const columns = [
     dataIndex: "time",
     key: "time",
     sorter: {
-      compare: (a, b) => a.name > b.name,
+      compare: (a, b) => a.time.localeCompare(b.time),
     },
   },
 ];

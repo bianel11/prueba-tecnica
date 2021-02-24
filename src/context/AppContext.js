@@ -35,7 +35,6 @@ export function AppContextProvider({ children }) {
   }, []);
 
   const login = (_userName) => {
-    // let balance = gameStatus.balance;
     setGameStatus({
       ...gameStatus,
       userName: _userName,
@@ -77,7 +76,7 @@ export function AppContextProvider({ children }) {
       ...playerList,
       {
         id: playerList.length + 1,
-        name: gameStatus.userName || "invitado",
+        name: gameStatus.userName || "Invitado",
         result: gameStatus.balance,
         time: new Date().toLocaleString("en-US", {
           hour: "numeric",
@@ -89,7 +88,6 @@ export function AppContextProvider({ children }) {
   };
 
   const refreshStorageConfig = useCallback(() => {
-    console.log();
     let { balance, userName } = gameStatus;
     localStorage.setItem("config", JSON.stringify({ balance, userName }));
   }, [gameStatus]);

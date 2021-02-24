@@ -1,16 +1,19 @@
 import React, { useState } from "react";
+import { AppContextProvider } from "./context/AppContext";
 import { Typography, Button } from "antd";
 import LayoutApp from "./Layout/LayoutApp";
 import DataTable from "./components/DataTable/DataTable.js";
 import ModalGame from "./components/ModalGame/ModalGame.js";
-import { AppContextProvider } from "./context/AppContext";
+
 const { Title } = Typography;
 
 function App() {
+  
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
   };
+
   return (
     <AppContextProvider>
       <LayoutApp>
